@@ -27,7 +27,7 @@ AppDataSource.initialize()
   });
 
 app.get('/', (req, res) => {
-  res.send('Hello from Vanrysel Test API !');
+  res.send('Hello from API !');
 });
 
 app.use('/api/v1', router);

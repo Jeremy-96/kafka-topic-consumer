@@ -6,24 +6,26 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { Product } from '../entities/Product';
 import { AppDataSource } from '../database/data-source';
+import dotenv from 'dotenv';
 
 const { CompressionTypes, CompressionCodecs } = kafkajs;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const certDir = join(__dirname, '..', '..', 'certificates');
 
+dotenv.config();
 CompressionCodecs[CompressionTypes.LZ4] = new LZ4().codec;
 
 export class KafkaConsumerService {
   private resetOffset: boolean = false;
   private kafka: Kafka;
   private consumer: Consumer;
-  private topic = 'spread-catalog-vanrysel';
+  private topic = process.env.KAFKA_TOPIC;
   private productRepository = AppDataSource.getRepository(Product);
 
   constructor() {
     this.kafka = new Kafka({
-      brokers: ['public-kafka-aggregatespread-production.g.aivencloud.com:12668'],
+      brokers: [process.env.KAFKA_BROKER],
       ssl: {
         key: readFileSync(`${certDir}/kafka-access-key.pem`, 'utf-8'),
         cert: readFileSync(`${certDir}/access_certificate.crt`, 'utf-8'),
@@ -32,7 +34,7 @@ export class KafkaConsumerService {
       },
     });
     this.consumer = this.kafka.consumer({
-      groupId: 'vanrysel-expert-brands',
+      groupId: process.env.KAFKA_GROUP_ID,
       allowAutoTopicCreation: true,
     });
   }
