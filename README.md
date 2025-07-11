@@ -28,6 +28,10 @@ DB_NAME=
 DB_PORT=
 DB_USERNAME=
 DB_PASSWORD=
+
+KAFKA_BROKER=
+KAFKA_TOPIC=
+KAFKA_GROUP_ID=
 ```
 
 **Kafka certificates**  
