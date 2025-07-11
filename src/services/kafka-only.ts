@@ -16,11 +16,11 @@ export class KafkaConsumerService {
   private resetOffset: boolean = false;
   private kafka: Kafka;
   private consumer: Consumer;
-  private topic = 'spread-catalog-vanrysel';
+  private topic = process.env.KAFKA_TOPIC;
 
   constructor() {
     this.kafka = new Kafka({
-      brokers: ['public-kafka-aggregatespread-production.g.aivencloud.com:12668'],
+      brokers: [process.env.KAFKA_BROKER],
       ssl: {
         key: readFileSync(`${certDir}/kafka-access-key.pem`, 'utf-8'),
         cert: readFileSync(`${certDir}/access_certificate.crt`, 'utf-8'),
